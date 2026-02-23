@@ -1,0 +1,62 @@
+C51 COMPILER V9.54   MAIN                                                                  02/23/2026 09:48:47 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include"Delay.h"
+   3          #include"LCD1602.h"
+   4          #include"MatrixKey.h"
+   5          
+   6          unsigned char KeyNum=0;
+   7          unsigned int Password,cnt=0;
+   8          
+   9          void main(){
+  10   1        LCD_Init();
+  11   1        LCD_ShowString(1,1,"Password:");
+  12   1        while(1){
+  13   2          KeyNum=MatrixKey();
+  14   2          if(KeyNum){//按按键了再换数字，不然就一直保持原来
+  15   3            if(KeyNum<=10&&cnt<4){//输入次数小于4
+  16   4              Password*=10;   //密码左移
+  17   4              Password+=KeyNum%10; //获取一位
+  18   4              cnt++;  //计数加一
+  19   4              LCD_ShowNum(2,1,Password,4);//更新显示
+  20   4            }
+  21   3            if(KeyNum==11){//s11 确认
+  22   4              if(Password==2345){
+  23   5                LCD_ShowString(1,14,"OK ");//显示ok
+  24   5              }else{
+  25   5                LCD_ShowString(1,14,"err");//不然显示err
+  26   5              }
+  27   4              Password=0;
+  28   4              cnt=0;          //计数密码清零
+  29   4              LCD_ShowNum(2,1,Password,4);//更新显示
+  30   4            }
+  31   3            if(KeyNum==12){//s12 取消
+  32   4              Password=0;
+  33   4              cnt=0;          //计数密码清零
+  34   4              LCD_ShowNum(2,1,Password,4);//更新显示
+  35   4            }
+  36   3          }
+  37   2        }
+  38   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    189    ----
+   CONSTANT SIZE    =     18    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
